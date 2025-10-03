@@ -1,6 +1,7 @@
 import React from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { Link } from "react-router";
 
 const Navbar = () => {
    const cartItems = useSelector(state => state.cart.items);
@@ -16,21 +17,21 @@ const Navbar = () => {
 
             {/* Nav Links */}
             <div className="hidden md:flex space-x-8 font-medium">
-               <a href="#" className="hover:text-blue-400 transition">Home</a>
+               <a href="#" className="hover:text-blue-400 transition"><Link to={"/"}>Home</Link></a>
                <a href="#" className="hover:text-blue-400 transition">Shop</a>
                <a href="#" className="hover:text-blue-400 transition">About</a>
                <a href="#" className="hover:text-blue-400 transition">Contact</a>
             </div>
 
             {/* Cart Icon */}
-            <div className="relative cursor-pointer">
+            <Link to="/cart" className="relative cursor-pointer">
                <FaShoppingCart className="w-7 h-7" />
                {cartCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
                      {cartCount}
                   </span>
                )}
-            </div>
+            </Link>
          </div>
       </nav>
    );
