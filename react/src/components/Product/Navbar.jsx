@@ -3,6 +3,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
+   const cartItems = useSelector(state => state.cart.items);
    const cartCount = useSelector(state => state.cart.count);
 
    return (

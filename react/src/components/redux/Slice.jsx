@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
-   items: []
+   items: localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [],
+   count: localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")).length : 0,
 }
 
 const countSlice = createSlice({
@@ -8,19 +9,19 @@ const countSlice = createSlice({
    initialState,
    reducers: {
       addItem: (state, action) => {
-         // state.items += 1
+         state.count += 1
          state.items.push(action.payload)
          console.log(action.payload);
-         
+         localStorage.setItem("cart", JSON.stringify(state.items));
+
       },
-      removeItem: (state) => {
-         state.count -= 1
-      },
-      clearItem: (state) => {
-         state.count = 0
+      removeItem: (state, action) => {
+         state.items = state.items.filter((item) => item.id !== action.payload);
+         state.count = state.items.length;
+         localStorage.setItem("cart", JSON.stringify(state.items));  
       }
    }
 })
 
-export const { addItem, removeItem, clearItem } = countSlice.actions
+export const { addItem, removeItem } = countSlice.actions
 export default countSlice.reducer

@@ -1,23 +1,37 @@
 import React, { useEffect } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, removeItem, clearItem } from "../redux/Slice";
+import { addItem, removeItem } from "../redux/Slice";
 import { fetchProducts } from "../redux/ProductSlice";
 
 const Product = () => {
    const dispatch = useDispatch();
+
+   // Cart State
    const cartCount = useSelector((state) => state.cart.count);
-   const ProductsSelector = useSelector((state) => state.products.items);
+
+   // Products
+   const productsItems = useSelector((state) => state.products.items);
+
+
+   // Carts Items
+   const cartItems = useSelector((state) => state.cart.items);
 
    useEffect(() => {
       dispatch(fetchProducts())
-   }, );
+   },);
+
+   const isInCart = (product) => {
+      return cartItems.some((item) => item.id === product.id);
+   };
+
+
 
    return (
       <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
          <h1 className="text-3xl font-bold text-gray-800 mb-6">Products</h1>
          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
-            {ProductsSelector && ProductsSelector.map((product) => (
+            {productsItems && productsItems.map((product) => (
                <div
                   key={product.id}
                   className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 flex flex-col"
@@ -38,27 +52,37 @@ const Product = () => {
                      {/* Buttons */}
                      <div className="mt-4 flex flex-col gap-2">
                         <button
-                           onClick={() => dispatch(addItem(ProductsSelector.find(item => item.id === product.id)))}
-                           className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
+                           onClick={() => dispatch(addItem(product))}
+                           disabled={isInCart(product)} // ✅ now per-product check
+                           className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition mt-3
+                                 ${isInCart(product)
+                                 ? "bg-gray-400 cursor-not-allowed"
+                                 : "bg-blue-600 hover:bg-blue-700 text-white"
+                              }`}
                         >
                            <FaShoppingCart />
-                           Add
+                           {isInCart(product) ? "Added to Cart" : "Add"}
                         </button>
 
+
+
                         <button
-                           onClick={() => cartCount > 0 && dispatch(removeItem())}
-                           className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
+                           onClick={() => {
+                              if (isInCart(product)) {
+                                 dispatch(removeItem(product.id)); // ✅ sirf tab remove hoga jab cart me hai
+                              }
+                           }}
+                           className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition
+      ${isInCart(product)
+                                 ? "bg-red-600 hover:bg-red-700 text-white"
+                                 : "bg-gray-300 cursor-not-allowed"} // ✅ disable style if not in cart
+   `}
+                           disabled={!isInCart(product)} // ✅ agar cart me nahi hai to disable button
                         >
                            <FaShoppingCart />
                            Remove
                         </button>
 
-                        <button
-                           onClick={() => cartCount > 0 && dispatch(clearItem())}
-                           className="flex items-center justify-center gap-2 bg-red-700 hover:bg-red-800 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-300"
-                        >
-                           Clear Cart
-                        </button>
                      </div>
                   </div>
                </div>
