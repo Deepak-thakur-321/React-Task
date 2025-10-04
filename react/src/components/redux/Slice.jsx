@@ -1,27 +1,54 @@
 import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
    items: localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [],
-   count: localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")).length : 0,
+   count: JSON.parse(localStorage.getItem("cart"))?.reduce((sum, i) => sum + i.quantity, 0) || 0,
 }
 
-const countSlice = createSlice({
+const cartSlice = createSlice({
    name: "cart",
    initialState,
    reducers: {
       addItem: (state, action) => {
-         state.count += 1
-         state.items.push(action.payload)
-         console.log(action.payload);
+         const item = action.payload;
+         const existingItem = state.items.find((i) => i.id === item.id);
+
+         if (existingItem) {
+            existingItem.quantity += 1;
+         } else {
+            state.items.push({ ...item, quantity: 1 });
+         }
+
          localStorage.setItem("cart", JSON.stringify(state.items));
-
       },
-      removeItem: (state, action) => {
-         state.items = state.items.filter((item) => item.id !== action.payload);
-         state.count = state.items.length;
-         localStorage.setItem("cart", JSON.stringify(state.items));  
-      }
-   }
-})
 
-export const { addItem, removeItem } = countSlice.actions
-export default countSlice.reducer
+      decrementItem: (state, action) => {
+         const id = action.payload;
+         const existingItem = state.items.find((i) => i.id === id);
+
+         if (existingItem) {
+            if (existingItem.quantity > 1) {
+               existingItem.quantity -= 1;
+            } else {
+               // Remove the item if quantity reaches 0
+               state.items = state.items.filter((i) => i.id !== id);
+            }
+         }
+
+         localStorage.setItem("cart", JSON.stringify(state.items));
+      },
+
+      removeItem: (state, action) => {
+         const id = action.payload;
+         state.items = state.items.filter((item) => item.id !== id);
+         localStorage.setItem("cart", JSON.stringify(state.items));
+      },
+
+      clearCart: (state) => {
+         state.items = [];
+         localStorage.removeItem("cart");
+      },
+   },
+});
+
+export const { addItem, removeItem, decrementItem, clearCart } = cartSlice.actions
+export default cartSlice.reducer

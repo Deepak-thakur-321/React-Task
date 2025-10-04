@@ -5,7 +5,7 @@ import { Link } from "react-router";
 
 const Navbar = () => {
    const cartItems = useSelector(state => state.cart.items);
-   const cartCount = useSelector(state => state.cart.count);
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
    return (
       <nav className="bg-gray-900 text-white shadow-md">
