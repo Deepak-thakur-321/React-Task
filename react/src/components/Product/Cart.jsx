@@ -1,9 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, removeItem, decrementItem } from "../redux/Slice";
+import { addItem, removeItem, decrementItem, clearCart } from "../redux/Slice";
 import { FiTrash2, FiMinus, FiPlus } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+
 
 const Cart = () => {
+
+   const navigate = useNavigate();
    const dispatch = useDispatch();
    const cartItems = useSelector((state) => state.cart.items);
 
@@ -18,6 +22,12 @@ const Cart = () => {
    const handleRemove = (id) => {
       dispatch(removeItem(id));
    };
+
+   const handleCheckout = ()=>{
+      alert("Checkout Successful!");
+      dispatch(clearCart());
+      navigate("/");
+   }
 
    const totalPrice = cartItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
@@ -34,7 +44,7 @@ const Cart = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                {/* Left Section — Product List */}
                <div className="lg:col-span-2 bg-white rounded-3xl border border-gray-100 shadow-lg p-6 max-h-[70vh] overflow-y-auto">
-                  {cartItems.map((product, index) => (
+                  {cartItems.map((product) => (
                      <div
                         key={product.id}
                         className="flex items-center justify-between gap-4 border-b border-gray-100 py-4 last:border-none"
@@ -96,23 +106,27 @@ const Cart = () => {
                {/* Right Section — Summary */}
                <div className="bg-white rounded-3xl shadow-lg p-6 h-max sticky top-6 border-b">
                   <h3 className="text-xl font-bold text-gray-800 mb-4">Order Summary</h3>
+
                   <div className="flex justify-between text-gray-600 mb-2">
                      <span>Subtotal</span>
                      <span>₹{totalPrice.toFixed(2)}</span>
                   </div>
+
                   <div className="flex justify-between text-gray-600 mb-2">
                      <span>Shipping</span>
                      <span className="text-green-600 font-semibold">Free</span>
                   </div>
+
                   <hr className="my-4" />
                   <div className="flex justify-between text-xl font-bold text-gray-900">
                      <span>Total</span>
                      <span>₹{totalPrice.toFixed(2)}</span>
                   </div>
 
-                  <button className="mt-6 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-200">
+                  <button onClick={()=>{handleCheckout()}} className="mt-6 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-200">
                      Proceed to Checkout
                   </button>
+
                </div>
             </div>
          )}

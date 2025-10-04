@@ -53,7 +53,7 @@ const Product = () => {
                      <div className="mt-4 flex flex-col gap-2">
                         <button
                            onClick={() => dispatch(addItem(product))}
-                           disabled={isInCart(product)} // ✅ now per-product check
+                           disabled={isInCart(product)}
                            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition mt-3
                                  ${isInCart(product)
                                  ? "bg-gray-400 cursor-not-allowed"
@@ -69,7 +69,7 @@ const Product = () => {
                         <button
                            onClick={() => {
                               if (isInCart(product)) {
-                                 dispatch(removeItem(product.id)); // ✅ sirf tab remove hoga jab cart me hai
+                                 dispatch(removeItem(product.id)); 
                               }
                            }}
                            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition
@@ -77,7 +77,7 @@ const Product = () => {
                                  ? "bg-red-600 hover:bg-red-700 text-white"
                                  : "bg-gray-300 cursor-not-allowed"} // ✅ disable style if not in cart
    `}
-                           disabled={!isInCart(product)} // ✅ agar cart me nahi hai to disable button
+                           disabled={!isInCart(product)} 
                         >
                            <FaShoppingCart />
                            Remove
