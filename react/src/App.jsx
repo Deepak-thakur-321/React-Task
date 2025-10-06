@@ -10,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/product/:id" element={<Product />} key="product"></Route>
       </Routes>
     </Router>
   );
