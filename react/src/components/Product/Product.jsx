@@ -27,11 +27,12 @@ const Product = () => {
       <div>
 
          {/* Hero Section */}
-         <div className="py-6 px-4 mt-5">
+
+         <div className="py-6  px-4 mt-5">
             <div className="rounded-3xl overflow-hidden shadow-2xl bg-slate-50">
                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[500px]">
 
-                  {/* Left Section - 8 columns */}
+                  {/* Left Section- 8 columns */}
                   <div className="lg:col-span-8 bg-[rgb(222,231,236)] rounded-2xl px-5 ">
                      {/* Nested grid inside left section */}
                      <div className="grid grid-cols-7 gap-4 items-center w-full">
