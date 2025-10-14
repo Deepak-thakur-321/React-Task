@@ -18,3 +18,18 @@ h5 {
    font-weight: 600;
    color: #1d1d1f;
 }
+
+
+@keyframes slide {
+   0% {
+      transform: translateX(0);
+   }
+
+   100% {
+      transform: translateX(-50%);
+   }
+}
+
+.animate-slide {
+   animation: slide 15s linear infinite;
+}
